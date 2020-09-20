@@ -7,10 +7,10 @@ const __dirname = path.dirname(__filename);
 
 const getFilePath = (filename) => path.join(__dirname, filename);
 
-const getWrittenJson = async (filename) => {
+const getWrittenJson = (filename) => {
   try {
     const path = getFilePath(filename);
-    const json = await fs.promises.readFile(path, 'utf8');
+    const json = fs.readFileSync(path, 'utf8');
     const result = JSON.parse(json);
     return result;
   } catch (e) {
@@ -18,9 +18,9 @@ const getWrittenJson = async (filename) => {
   }
 }
 
-const getVersion = async () => {
+const getVersion = () => {
   try {
-    const writtenPackage = await getWrittenJson('package.json');
+    const writtenPackage = getWrittenJson('package.json');
     const { version } = writtenPackage;
     return version;
   } catch (e) {
