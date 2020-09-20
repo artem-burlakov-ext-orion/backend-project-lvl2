@@ -7,14 +7,29 @@ const __dirname = path.dirname(__filename);
 
 const getFilePath = (filename) => path.join(__dirname, filename);
 
+const getWrittenJson = async (filename) => {
+  try {
+    const path = getFilePath(filename);
+    const json = await fs.promises.readFile(path, 'utf8');
+    const result = JSON.parse(json);
+    return result;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 const getVersion = async () => {
   try {
-    const json = await fs.promises.readFile(getFilePath('package.json'), 'utf8');
-    const version = JSON.parse(json);
+    const writtenPackage = await getWrittenJson('package.json');
+    const { version } = writtenPackage;
     return version;
   } catch (e) {
     console.error(e)
   }
 }
 
-export default getVersion;
+export {
+  getWrittenJson,
+  getVersion,
+  getFilePath,
+};

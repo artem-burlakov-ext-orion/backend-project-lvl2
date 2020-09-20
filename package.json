@@ -2,7 +2,7 @@
   "name": "two-files-diff",
   "version": "1.0.0",
   "description": "",
-  "main": "gendiff.js",
+  "main": "index",
   "bin": {
     "gendiff": "bin/gendiff.js"
   },
