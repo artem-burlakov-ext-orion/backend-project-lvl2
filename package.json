@@ -10,9 +10,13 @@
     "node": ">=14"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx -n --experimental-vm-modules jest"
   },
   "type": "module",
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {}
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eifory/backend-project-lvl2.git"
@@ -25,5 +29,13 @@
   "homepage": "https://github.com/eifory/backend-project-lvl2#readme",
   "dependencies": {
     "commander": "^6.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^24.0.2",
+    "jest": "^26.4.2",
+    "jest-cli": "^26.4.2"
   }
 }
