@@ -1,11 +1,18 @@
 {
-  "name": "backend-project-lvl2",
+  "name": "two-files-diff",
   "version": "1.0.0",
   "description": "",
   "main": "gendiff.js",
+  "bin": {
+    "gendiff": "bin/gendiff.js"
+  },
+  "engines": {
+    "node": ">=14"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eifory/backend-project-lvl2.git"
