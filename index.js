@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import { getWrittenJson } from './util.js';
 
+const isExist = (after, before, key) => _.has(after, key) && _.has(before, key);
+
 const isUnchanged = (before, after, key) => before[key] === after[key];
 const isDeleted = (before, after, key) => _.has(before, key) && !_.has(after, key);
 const isAdded = (before, after, key) => _.has(after, key) && !_.has(before, key);
-const isChanged = (before, after, key) => {
-  return _.has(after, key) && _.has(before, key) && before[key] !== after[key];
-} 
+const isChanged = (before, after, key) => isExist(before, after, key) && before[key] !== after[key];
 
 const getStates = (before, after, key) => ({
   added: {
@@ -32,8 +32,8 @@ export default (beforeData, afterData, outputType) => {
   const after = getWrittenJson(afterData);
   const uniqKeys = [...new Set([...Object.keys(before), ...Object.keys(after)])];
   const allData = uniqKeys.reduce((acc, key) => {
-    const [ , { result }] = Object.entries(getStates(before, after, key))
-    .find(([ , stateVal]) => stateVal.check());
+    const [, { result }] = Object.entries(getStates(before, after, key))
+      .find(([, stateVal]) => stateVal.check());
     acc.push(result);
     return acc;
   }, []);

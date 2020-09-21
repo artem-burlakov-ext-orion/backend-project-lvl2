@@ -9,8 +9,8 @@ const getFilePath = (filename) => path.join(__dirname, filename);
 
 const getWrittenJson = (filename) => {
   try {
-    const path = getFilePath(filename);
-    const json = fs.readFileSync(path, 'utf8');
+    const filePath = getFilePath(filename);
+    const json = fs.readFileSync(filePath, 'utf8');
     const result = JSON.parse(json);
     return result;
   } catch (e) {
