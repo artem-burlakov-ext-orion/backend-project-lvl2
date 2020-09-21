@@ -1,15 +1,19 @@
-import { dirname, join } from 'path';
-import fs from 'fs';
+import { dirname, join, extname } from 'path';
+import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
+import getParser from './parsers.js';
 
 const getPath = (filename) => join(dirname(fileURLToPath(import.meta.url)), filename);
 
-const getWrittenJson = (filePath) => JSON.parse(fs.readFileSync(filePath, 'utf8'));
+const readFile = (filePath) => {
+  const ext = extname(filePath).slice(1);
+  return getParser()[ext](readFileSync(filePath, 'utf8'));
+};
 
-const getVersion = () => getWrittenJson('package.json').version;
+const getVersion = () => readFile('package.json').version;
 
 export {
-  getWrittenJson,
+  readFile,
   getVersion,
   getPath,
 };

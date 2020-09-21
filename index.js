@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { getWrittenJson } from './util.js';
+import { readFile } from './util.js';
 
 const isExist = (after, before, key) => _.has(after, key) && _.has(before, key);
 
@@ -28,8 +28,8 @@ const getStates = (before, after, key) => ({
 });
 
 export default (firstFilePath, secondFilePath) => {
-  const before = getWrittenJson(firstFilePath);
-  const after = getWrittenJson(secondFilePath);
+  const before = readFile(firstFilePath);
+  const after = readFile(secondFilePath);
 
   const uniqKeys = [...new Set([...Object.keys(before), ...Object.keys(after)])];
   const allData = uniqKeys.reduce((acc, key) => {
