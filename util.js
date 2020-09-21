@@ -7,9 +7,8 @@ const __dirname = path.dirname(__filename);
 
 const getFilePath = (filename) => path.join(__dirname, filename);
 
-const getWrittenJson = (filename) => {
+const getWrittenJson = (filePath) => {
   try {
-    const filePath = getFilePath(filename);
     const json = fs.readFileSync(filePath, 'utf8');
     const result = JSON.parse(json);
     return result;

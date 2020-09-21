@@ -27,9 +27,10 @@ const getStates = (before, after, key) => ({
   },
 });
 
-export default (beforeData, afterData, outputType) => {
-  const before = getWrittenJson(beforeData);
-  const after = getWrittenJson(afterData);
+export default (firstFilePath, secondFilePath, outputType) => {
+  const before = getWrittenJson(firstFilePath);
+  const after = getWrittenJson(secondFilePath);
+
   const uniqKeys = [...new Set([...Object.keys(before), ...Object.keys(after)])];
   const allData = uniqKeys.reduce((acc, key) => {
     const [, { result }] = Object.entries(getStates(before, after, key))
