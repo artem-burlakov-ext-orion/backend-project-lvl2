@@ -16,7 +16,7 @@ const getWrittenJson = (filename) => {
   } catch (e) {
     console.error(e);
   }
-}
+};
 
 const getVersion = () => {
   try {
@@ -24,9 +24,9 @@ const getVersion = () => {
     const { version } = writtenPackage;
     return version;
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
-}
+};
 
 export {
   getWrittenJson,

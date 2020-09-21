@@ -1,38 +1,38 @@
+import _ from 'lodash';
 import { getWrittenJson } from './util.js';
 
 const isUnchanged = (before, after, key) => before[key] === after[key];
-const isDeleted = (before, after, key) => {
-  return Object.keys(before).includes(key) && !Object.keys(after).includes(key);
-};
-const isAdded = (before, after, key) => {
-  return Object.keys(after).includes(key) && !Object.keys(before).includes(key);
-};
+const isDeleted = (before, after, key) => _.has(before, key) && !_.has(after, key);
+const isAdded = (before, after, key) => _.has(after, key) && !_.has(before, key);
 
-export default (before, after, outputType) => {
-  const beforeData = getWrittenJson(before);
-  const afterData = getWrittenJson(after);
-  const beforeKeys = Object.keys(beforeData);
-  const afterKeys = Object.keys(afterData);
-  const uniqKeys = [...new Set([...beforeKeys, ...afterKeys])];
+const getConvertedData = (before, after, key) => ({
+  added: `  + ${key}: ${after[key]}`,
+  deleted: `  - ${key}: ${before[key]}`,
+  unchanged: `    ${key}: ${before[key]}`,
+  changed: `  - ${key}: ${before[key]}\n  + ${key}: ${after[key]}`,
+});
 
+export default (beforeData, afterData, outputType) => {
+  const before = getWrittenJson(beforeData);
+  const after = getWrittenJson(afterData);
+  const uniqKeys = [...new Set([...Object.keys(before), ...Object.keys(after)])];
   const allData = uniqKeys.reduce((acc, key) => {
-    let newItem = `  - ${key}: ${beforeData[key]}\n  + ${key}: ${afterData[key]}`;
-    if (isUnchanged(beforeData, afterData, key)) {
-      newItem = `    ${key}: ${beforeData[key]}`;
+    let newItem = getConvertedData(before, after, key).changed;
+    if (isUnchanged(before, after, key)) {
+      newItem = getConvertedData(before, after, key).unchanged;
     }
-    if (isAdded(beforeData, afterData, key)) {
-      newItem = `  + ${key}: ${afterData[key]}`;
+    if (isAdded(before, after, key)) {
+      newItem = getConvertedData(before, after, key).added;
     }
-    if (isDeleted(beforeData, afterData, key)) {
-      newItem = `  - ${key}: ${beforeData[key]}`;
+    if (isDeleted(before, after, key)) {
+      newItem = getConvertedData(before, after, key).deleted;
     }
-    acc = `${acc}\n${newItem}`;
+    acc.push(newItem);
     return acc;
-  }, '');
-  console.log(`{\n${allData}\n}`);
-  return;
+  }, []);
+  console.log(`{\n${allData.join('\n')}\n}`);
 };
-    
+
 //   const added = afterKeys
 //     .filter((key) => !beforeKeys.includes(key))
 //     .map((key) => `  + ${key}: ${afterData[key]}`);
