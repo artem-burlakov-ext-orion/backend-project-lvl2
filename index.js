@@ -37,5 +37,5 @@ export default (beforeData, afterData, outputType) => {
     acc.push(result);
     return acc;
   }, []);
-  console.log(`{\n${allData.join('\n')}\n}`);
+  return `{\n${allData.join('\n')}\n}`;
 };
