@@ -10,6 +10,6 @@ program
   .option('-f, --format [type]', 'output format')
   .arguments('<firstFile> <secondFile>')
   .action((firstFile, secondFile) => {
-    console.log(getDiff(getFilePath(firstFile), getFilePath(secondFile), program.format))
+    console.log(getDiff(getFilePath(firstFile), getFilePath(secondFile), program.format));
   })
   .parse(process.argv);
