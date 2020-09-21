@@ -27,7 +27,7 @@ const getStates = (before, after, key) => ({
   },
 });
 
-export default (firstFilePath, secondFilePath, outputType) => {
+export default (firstFilePath, secondFilePath) => {
   const before = getWrittenJson(firstFilePath);
   const after = getWrittenJson(secondFilePath);
 

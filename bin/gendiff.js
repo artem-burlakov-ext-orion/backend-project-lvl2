@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 import program from 'commander';
-import { getVersion, getFilePath } from '../util.js';
+import { getVersion, getPath } from '../util.js';
 import getDiff from '../index.js';
 
 program
@@ -9,7 +9,5 @@ program
   .description('two files difference')
   .option('-f, --format [type]', 'output format')
   .arguments('<firstFile> <secondFile>')
-  .action((firstFile, secondFile) => {
-    console.log(getDiff(getFilePath(firstFile), getFilePath(secondFile), program.format));
-  })
+  .action((firstFile, secondFile) => console.log(getDiff(getPath(firstFile), getPath(secondFile))))
   .parse(process.argv);
