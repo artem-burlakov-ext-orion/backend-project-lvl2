@@ -9,5 +9,5 @@ program
   .description('two files difference')
   .option('-f, --format [type]', 'output format')
   .arguments('<firstFile> <secondFile>')
-  .action((firstFile, secondFile) => console.log(buildDiff(getPath(firstFile), getPath(secondFile))))
+  .action((firstFile, secondFile) => buildDiff(getPath(firstFile), getPath(secondFile)))
   .parse(process.argv);
