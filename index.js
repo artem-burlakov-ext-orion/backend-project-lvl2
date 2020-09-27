@@ -42,9 +42,11 @@ const getState = (before, after, key, f) => [
 ];
 
 const buildTree = (before, after) => {
-  const sortedUniqKeys = [...new Set([...Object.keys(before), ...Object.keys(after)])].sort();
+  const allKeys = [...Object.keys(before), ...Object.keys(after)];
+  const sortedUniqKeys = [...new Set(allKeys)].sort();
   return sortedUniqKeys.map((key) => {
-    const { state, build } = getState(before, after, key, buildTree).find(({ check }) => check());
+    const { state, build } = getState(before, after, key, buildTree)
+      .find(({ check }) => check());
     return { key, state, ...build() };
   });
 };

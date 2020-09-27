@@ -22,8 +22,8 @@ const getCurKeysChain = (keysChain, elem) => (keysChain ? `${keysChain}.${elem.k
 
 export default (tree) => {
   const iter = (data, keysChain = '') => data.reduce((acc, elem) => {
-    const render = renders[elem.state](elem, getCurKeysChain(keysChain, elem), iter);
-    return render ? `${acc}${getLineFeed(acc)}${render}` : acc;
+    const result = renders[elem.state](elem, getCurKeysChain(keysChain, elem), iter);
+    return result ? `${acc}${getLineFeed(acc)}${result}` : acc;
   }, '');
   return iter(tree);
 };

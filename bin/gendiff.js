@@ -15,6 +15,8 @@ program
   .option('-f, --format [type]', 'output format', 'stylish')
   .arguments('<firstFile> <secondFile>')
   .action((firstFile, secondFile) => {
-    console.log(buildDiff(getPath(firstFile), getPath(secondFile), program.format));
+    const before = getPath(firstFile);
+    const after = getPath(secondFile);
+    console.log(buildDiff(before, after, program.format));
   })
   .parse(process.argv);

@@ -7,6 +7,11 @@ const renders = {
 };
 
 export default (tree) => {
-  const iter = (data, depth = 2) => `{${data.reduce((acc, elem) => `${acc}\n${renders[elem.state](elem, depth, iter)}`, '')}\n}`;
+  const iter = (data, depth = 2) => {
+    const result = data.reduce((acc, elem) => {
+      return `${acc}\n${renders[elem.state](elem, depth, iter)}`
+    }, '');
+    return `{${result}\n}`;
+  };
   return iter(tree);
 };
