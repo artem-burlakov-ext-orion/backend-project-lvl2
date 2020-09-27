@@ -18,8 +18,6 @@ program
   .option('-f, --format [type]', 'output format', 'stylish')
   .arguments('<firstFile> <secondFile>')
   .action((firstFile, secondFile) => {
-    const obj = buildDiff(getPath(firstFile), getPath(secondFile), program.format);
-    console.table(obj);
-    console.log(util.inspect(obj, {showHidden: false, depth: null}));
+    console.log(buildDiff(getPath(firstFile), getPath(secondFile), program.format));
   })
   .parse(process.argv);
