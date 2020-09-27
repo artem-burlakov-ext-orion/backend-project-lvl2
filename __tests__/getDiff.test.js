@@ -1,40 +1,48 @@
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { dirname, join, format } from 'path';
 import buildDiff from '../index.js';
+import getParser from '../parsers/parsers.js';
+import formatters from '../formatter/index.js';
 
-describe('diff with stylish format', () => {
-  const beforePath = join(dirname(fileURLToPath(import.meta.url)), '..', '__fixtures__', 'before-nested.json');
-  const afterPath = join(dirname(fileURLToPath(import.meta.url)), '..', '__fixtures__', 'after-nested.json');
-  const jsonResultPath = join(dirname(fileURLToPath(import.meta.url)), '..', '__fixtures__', 'result-stylish');
-  const format = 'stylish';
+const getPath = (fileName) => join(dirname(fileURLToPath(import.meta.url)), '..', '__fixtures__', fileName);
 
-  it('should return string', () => {
-    const result = buildDiff(beforePath, afterPath, format);
-    expect(typeof result).toBe('string');
+let testData = [];
+let expectedData = {};
+
+beforeAll(() => {
+  const formats = Object.keys(formatters());
+  const exts = Object.keys(getParser());
+  const resultExts = {
+    json: 'json',
+    plain: 'txt',
+    stylish: 'txt',
+  };
+
+  formats.forEach((format) => {
+    expectedData[format] = fs.readFileSync(getPath(`result-${format}.${resultExts[format]}`), 'utf8');
+    exts.forEach((ext) => {
+      const beforePath = getPath(`before-nested.${ext}`);
+      const afterPath = getPath(`after-nested.${ext}`);
+      testData.push(beforePath, afterPath, format);
+    });
   });
 
-  it('should return result as in result-stylish', () => {
-    const result = buildDiff(beforePath, afterPath, format);
-    const expected = fs.readFileSync(jsonResultPath, 'utf8');
-    expect(result).toBe(expected);
-  });
+  // testData = exts.reduce((acc, ext) => {
+  //   formats.forEach((format) => {
+  //     const beforePath = getPath(`before-nested.${ext}`);
+  //     const afterPath = getPath(`after-nested.${ext}`);
+  //     acc.push([beforePath, afterPath, format]);
+  //   })
+  //   return acc;
+  // }, []);
+
+  // expectedData = formats.reduce((acc, format) => {
+  //   acc[format] = fs.readFileSync(getPath(`result-${format}.${resultExts[format]}`), 'utf8');
+  //   return acc;
+  // }, {});
 });
 
-describe('diff with plain format', () => {
-  const beforePath = join(dirname(fileURLToPath(import.meta.url)), '..', '__fixtures__', 'before-nested.json');
-  const afterPath = join(dirname(fileURLToPath(import.meta.url)), '..', '__fixtures__', 'after-nested.json');
-  const jsonResultPath = join(dirname(fileURLToPath(import.meta.url)), '..', '__fixtures__', 'result-plain');
-  const format = 'plain';
-
-  it('should return string', () => {
-    const result = buildDiff(beforePath, afterPath, format);
-    expect(typeof result).toBe('string');
-  });
-
-  it('should return result as in result-plain', () => {
-    const result = buildDiff(beforePath, afterPath, format);
-    const expected = fs.readFileSync(jsonResultPath, 'utf8');
-    expect(result).toBe(expected);
-  });
+test.each(testData)('build diff(%s, %s)', (before, after, format) => {
+  expect(buildDiff(before, after, format)).toBe(expectedData[format]);
 });

@@ -18,7 +18,7 @@ const renders = {
 };
 
 const getLineFeed = (data) => (data ? '\n' : data);
-const getCurKeysChain = (keysChain, elem) => keysChain ? `${keysChain}.${elem.key}` : elem.key;
+const getCurKeysChain = (keysChain, elem) => (keysChain ? `${keysChain}.${elem.key}` : elem.key);
 
 export default (tree) => {
   const iter = (data, keysChain = '') => data.reduce((acc, elem) => {

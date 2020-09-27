@@ -16,6 +16,9 @@ lint:
 fix:
 	npx eslint --fix .
 
+json:
+	npx eslint --format json .
+
 publish:
 	npm publish --dry-run
 
