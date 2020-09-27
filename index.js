@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { readFile } from './util.js';
-import formatter from './formatter.js';
+import formatter from './formatter/index.js';
 
 const isExist = (after, before, key) => _.has(after, key) && _.has(before, key);
 
@@ -43,7 +43,6 @@ const getState = (before, after, key, f) => [
 
 const buildTree = (before, after) => {
   const sortedUniqKeys = [...new Set([...Object.keys(before), ...Object.keys(after)])].sort();
-  console.log(uniqKeys);
   return sortedUniqKeys.map((key) => {
     const { state, getTreeElem } = getState(before, after, key, buildTree)
       .find(({ check }) => check());
