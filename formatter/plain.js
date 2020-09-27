@@ -4,30 +4,26 @@ const getResultByType = (value) => {
       return `'${value}'`;
     case 'object':
       return '[complex value]';
-    default: 
+    default:
       return value;
   }
 };
 
 const renders = {
-  added: ({ key, newValue }) => `Property '${key}' was added with value: ${getResultByType(newValue)}`,
-  deleted: ({ key }) => `Property '${key}' was removed`,
-  nested: ({ children }, f) => f(children),
-  unchanged: () => null,
-  changed: ({ key, oldValue, newValue}) => {
-    return `Property '${key}' was updated. From ${getResultByType(oldValue)} to ${getResultByType(newValue)}`;
-  },
-}
+  added: ({ newValue }, curKeysChain) => `Property '${curKeysChain}' was added with value: ${getResultByType(newValue)}`,
+  deleted: (curKeysChain) => `Property '${curKeysChain}' was removed`,
+  nested: ({ children }, curKeysChain, f) => f(children, curKeysChain),
+  unchanged: () => '',
+  changed: ({ oldValue, newValue }, curKeysChain) => `Property '${curKeysChain}' was updated. From ${getResultByType(oldValue)} to ${getResultByType(newValue)}`,
+};
 
-const getLineFeed = (data) => data === '' ? data : '\n';
+const getLineFeed = (data) => (data ? '\n' : data);
+const getCurKeysChain = (keysChain, elem) => keysChain ? `${keysChain}.${elem.key}` : elem.key;
 
-export default (data) => {
-  const f = (data) => {
-    const result = data.reduce((acc, elem) => {
-      const render = renders[elem.state](elem, f);
-      return render === null ? acc : `${acc}${getLineFeed(acc)}${render}`;
-    }, '');
-    return result;
-  }
-  return f(data);
+export default (tree) => {
+  const iter = (data, keysChain = '') => data.reduce((acc, elem) => {
+    const render = renders[elem.state](elem, getCurKeysChain(keysChain, elem), iter);
+    return render ? `${acc}${getLineFeed(acc)}${render}` : acc;
+  }, '');
+  return iter(tree);
 };

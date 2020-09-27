@@ -14,17 +14,17 @@ const getState = (before, after, key, f) => [
   {
     state: 'added',
     check: () => isAdded(before, after, key),
-    getTreeElem: () => ({ newValue: after[key]}),
+    getTreeElem: () => ({ newValue: after[key] }),
   },
   {
     state: 'deleted',
     check: () => isDeleted(before, after, key),
-    getTreeElem: () => ({ oldValue: before[key]}),
+    getTreeElem: () => ({ oldValue: before[key] }),
   },
   {
     state: 'unchanged',
     check: () => isUnchanged(before, after, key),
-    getTreeElem: () => ({ oldValue: before[key]}),
+    getTreeElem: () => ({ oldValue: before[key] }),
   },
   {
     state: 'nested',
@@ -47,7 +47,7 @@ const buildTree = (before, after) => {
     const { state, getTreeElem } = getState(before, after, key, buildTree)
       .find(({ check }) => check());
     const value = getTreeElem();
-    return { 
+    return {
       key,
       state,
       ...value,
@@ -59,4 +59,3 @@ export default (firstFile, secondFile, format) => {
   const tree = buildTree(readFile(firstFile), readFile(secondFile));
   return formatter(tree)[format]();
 };
-  

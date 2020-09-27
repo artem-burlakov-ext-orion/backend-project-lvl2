@@ -1,11 +1,8 @@
 #! /usr/bin/env node
 
 import program from 'commander';
-import util from 'util';
 import { getVersion, getPath } from '../util.js';
 import buildDiff from '../index.js';
-
-
 
 // console.log(util.inspect(myObject, {showHidden: false, depth: null}))
 
