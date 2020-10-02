@@ -12,11 +12,11 @@ const convertVal = (value, d) => {
 };
 
 const renders = {
-  added: ({ key, newValue }, depth) => `${' '.repeat(depth)}+ ${key}: ${convertVal(newValue, depth)}`,
-  deleted: ({ key, oldValue }, depth) => `${' '.repeat(depth)}- ${key}: ${convertVal(oldValue, depth)}`,
-  changed: ({ key, oldValue, newValue }, depth) => `${' '.repeat(depth)}- ${key}: ${convertVal(oldValue, depth)}\n${' '.repeat(depth)}+ ${key}: ${convertVal(newValue, depth)}`,
-  unchanged: ({ key, oldValue }, depth) => `${' '.repeat(depth)}  ${key}: ${convertVal(oldValue, depth)}`,
-  nested: ({ key, children }, depth, f) => `${' '.repeat(depth)}  ${key}: ${f(children, depth + 4)}`,
+  added: ({ key, newValue }, depth) => `${getIndent(depth)}+ ${key}: ${convertVal(newValue, depth)}`,
+  deleted: ({ key, oldValue }, depth) => `${getIndent(depth)}- ${key}: ${convertVal(oldValue, depth)}`,
+  changed: ({ key, oldValue, newValue }, depth) => `${getIndent(depth)}- ${key}: ${convertVal(oldValue, depth)}\n${' '.repeat(depth)}+ ${key}: ${convertVal(newValue, depth)}`,
+  unchanged: ({ key, oldValue }, depth) => `${getIndent(depth)}  ${key}: ${convertVal(oldValue, depth)}`,
+  nested: ({ key, children }, depth, f) => `${getIndent(depth)}  ${key}: ${f(children, depth + 4)}`,
 };
 
 export default (tree) => {
