@@ -20,9 +20,9 @@ const renders = {
 };
 
 export default (tree) => {
-  const iter = (data, depth = 2) => {
+  const iter = (data, depth) => {
     const result = data.reduce((acc, elem) => `${acc}\n${renders[elem.state](elem, depth, iter)}`, '');
     return `{${result}\n${getIndent(depth - 2)}}`;
   };
-  return iter(tree);
+  return iter(tree, 2);
 };

@@ -21,10 +21,10 @@ const getLineFeed = (data) => (data ? '\n' : data);
 const getCurKeysChain = (keysChain, elem) => (keysChain ? `${keysChain}.${elem.key}` : elem.key);
 
 export default (tree) => {
-  const iter = (data, keysChain = '') => data.reduce((acc, elem) => {
+  const iter = (data, keysChain) => data.reduce((acc, elem) => {
     const result = renders[elem.state](getCurKeysChain(keysChain, elem), elem, iter);
     const newAcc = `${acc}${getLineFeed(acc)}${result}`;
     return result ? newAcc : acc;
   }, '');
-  return iter(tree);
+  return iter(tree, '');
 };

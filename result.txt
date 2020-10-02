@@ -1,8 +1,0 @@
-{
-  - common: [object Object]
-  + common: [object Object]
-  - group1: [object Object]
-  + group1: [object Object]
-  - group2: [object Object]
-  + group3: [object Object]
-}
