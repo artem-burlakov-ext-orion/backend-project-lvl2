@@ -2,8 +2,8 @@ import yaml from 'js-yaml';
 import ini from 'ini';
 import _ from 'lodash';
 
-const isBoolean = (value) => (typeof value === 'boolean' ? value : Number(value));
-const getConverted = (value) => (Number.isNaN(value) ? value : isBoolean(value));
+const hasOnlyDigits = (value) => /^-?\d+$/.test(value);
+const getConverted = (value) => (hasOnlyDigits(value) ? Number(value) : value);
 
 const fixIniParse = (tree) => {
   const iter = (data) => Object.entries(data).reduce((acc, [key, val]) => {

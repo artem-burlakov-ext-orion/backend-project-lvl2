@@ -2,13 +2,14 @@ import _ from 'lodash';
 
 const getIndent = (depth) => ' '.repeat(depth);
 
-const getConvertedValue = (value, depth) => {
-  const result = Object.entries(value)
-    .reduce((acc, [key, val]) => `${acc}${getIndent(depth + 6)}${key}: ${convertVal(val, depth + 4)}\n`, '');
-  return `{\n${result}${getIndent(depth + 2)}}`;
+const convertVal = (value, d) => {
+  const iter = (data, depth) => {
+    const result = Object.entries(data)
+      .reduce((acc, [key, val]) => `${acc}${getIndent(depth + 6)}${key}: ${convertVal(val, depth + 4)}\n`, '');
+    return `{\n${result}${getIndent(depth + 2)}}`;
+  };
+  return _.isObject(value) ? iter(value, d) : value;
 };
-
-const convertVal = (value, depth) => (_.isObject(value) ? getConvertedValue(value, depth) : value);
 
 const renders = {
   added: ({ key, newValue }, depth) => `${' '.repeat(depth)}+ ${key}: ${convertVal(newValue, depth)}`,

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { dirname, join, format } from 'path';
+import { dirname, join } from 'path';
 import buildDiff from '../index.js';
 import getParser from '../parsers/parsers.js';
 import formatters from '../formatter/index.js';
@@ -26,7 +26,7 @@ const outputData = {
 };
 
 const testData = exts.reduce((acc, ext) => {
-  formats.map((format) => {
+  formats.forEach((format) => {
     const beforePath = getPath(`before-nested.${ext}`);
     const afterPath = getPath(`after-nested.${ext}`);
     acc.push([ext, format, beforePath, afterPath]);
