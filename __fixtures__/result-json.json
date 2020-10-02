@@ -1,0 +1,118 @@
+[
+  {
+    "key": "common",
+    "state": "nested",
+    "children": [
+      {
+        "key": "follow",
+        "state": "added",
+        "newValue": false
+      },
+      {
+        "key": "setting1",
+        "state": "unchanged",
+        "oldValue": "Value 1"
+      },
+      {
+        "key": "setting2",
+        "state": "deleted",
+        "oldValue": 200
+      },
+      {
+        "key": "setting3",
+        "state": "changed",
+        "oldValue": true,
+        "newValue": {
+          "key": "value"
+        }
+      },
+      {
+        "key": "setting4",
+        "state": "added",
+        "newValue": "blah blah"
+      },
+      {
+        "key": "setting5",
+        "state": "added",
+        "newValue": {
+          "key5": "value5"
+        }
+      },
+      {
+        "key": "setting6",
+        "state": "nested",
+        "children": [
+          {
+            "key": "doge",
+            "state": "nested",
+            "children": [
+              {
+                "key": "wow",
+                "state": "changed",
+                "oldValue": "too much",
+                "newValue": "so much"
+              }
+            ]
+          },
+          {
+            "key": "key",
+            "state": "unchanged",
+            "oldValue": "value"
+          },
+          {
+            "key": "ops",
+            "state": "added",
+            "newValue": "vops"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "group1",
+    "state": "nested",
+    "children": [
+      {
+        "key": "baz",
+        "state": "changed",
+        "oldValue": "bas",
+        "newValue": "bars"
+      },
+      {
+        "key": "foo",
+        "state": "unchanged",
+        "oldValue": "bar"
+      },
+      {
+        "key": "nest",
+        "state": "changed",
+        "oldValue": {
+          "key": "value"
+        },
+        "newValue": "str"
+      }
+    ]
+  },
+  {
+    "key": "group2",
+    "state": "deleted",
+    "oldValue": {
+      "abc": 12345,
+      "deep": {
+        "id": 45
+      }
+    }
+  },
+  {
+    "key": "group3",
+    "state": "added",
+    "newValue": {
+      "fee": 100500,
+      "deep": {
+        "id": {
+          "number": 45
+        }
+      }
+    }
+  }
+]

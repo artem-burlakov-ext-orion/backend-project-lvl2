@@ -7,42 +7,39 @@ import formatters from '../formatter/index.js';
 
 const getPath = (fileName) => join(dirname(fileURLToPath(import.meta.url)), '..', '__fixtures__', fileName);
 
-let testData = [];
-let expectedData = {};
+const formats = Object.keys(formatters());
+const exts = Object.keys(getParser());
 
-beforeAll(() => {
-  const formats = Object.keys(formatters());
-  const exts = Object.keys(getParser());
-  const resultExts = {
-    json: 'json',
-    plain: 'txt',
-    stylish: 'txt',
-  };
+const outputData = {
+  json: {
+    ext: 'json',
+    parse: (path) => (fs.readFileSync(path, 'utf8')),
+  },
+  plain: {
+    ext: 'txt',
+    parse: (path) => fs.readFileSync(path, 'utf8'),
+  },
+  stylish: {
+    ext: 'txt',
+    parse: (path) => fs.readFileSync(path, 'utf8'),
+  },
+};
 
-  formats.forEach((format) => {
-    expectedData[format] = fs.readFileSync(getPath(`result-${format}.${resultExts[format]}`), 'utf8');
-    exts.forEach((ext) => {
-      const beforePath = getPath(`before-nested.${ext}`);
-      const afterPath = getPath(`after-nested.${ext}`);
-      testData.push(beforePath, afterPath, format);
-    });
+const testData = exts.reduce((acc, ext) => {
+  formats.map((format) => {
+    const beforePath = getPath(`before-nested.${ext}`);
+    const afterPath = getPath(`after-nested.${ext}`);
+    acc.push([ext, format, beforePath, afterPath]);
   });
+  return acc;
+}, []);
 
-  // testData = exts.reduce((acc, ext) => {
-  //   formats.forEach((format) => {
-  //     const beforePath = getPath(`before-nested.${ext}`);
-  //     const afterPath = getPath(`after-nested.${ext}`);
-  //     acc.push([beforePath, afterPath, format]);
-  //   })
-  //   return acc;
-  // }, []);
+const expectedData = formats.reduce((acc, format) => {
+  const resultPath = getPath(`result-${format}.${outputData[format].ext}`);
+  acc[format] = outputData[format].parse(resultPath);
+  return acc;
+}, {});
 
-  // expectedData = formats.reduce((acc, format) => {
-  //   acc[format] = fs.readFileSync(getPath(`result-${format}.${resultExts[format]}`), 'utf8');
-  //   return acc;
-  // }, {});
-});
-
-test.each(testData)('build diff(%s, %s)', (before, after, format) => {
+test.each(testData)('build %s files diff, output %s', (_, format, before, after) => {
   expect(buildDiff(before, after, format)).toBe(expectedData[format]);
 });

@@ -17,6 +17,7 @@ program
   .action((firstFile, secondFile) => {
     const before = getPath(firstFile);
     const after = getPath(secondFile);
-    console.log(buildDiff(before, after, program.format));
+    const diff = buildDiff(before, after, program.format);
+    console.dir(diff, { depth: null });
   })
   .parse(process.argv);

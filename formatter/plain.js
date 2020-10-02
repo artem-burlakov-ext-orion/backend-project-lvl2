@@ -1,4 +1,4 @@
-const getResultByType = (value) => {
+const getValByType = (value) => {
   switch (typeof value) {
     case 'string':
       return `'${value}'`;
@@ -10,11 +10,11 @@ const getResultByType = (value) => {
 };
 
 const renders = {
-  added: ({ newValue }, curKeysChain) => `Property '${curKeysChain}' was added with value: ${getResultByType(newValue)}`,
+  added: (curKeysChain, { newValue }) => `Property '${curKeysChain}' was added with value: ${getValByType(newValue)}`,
   deleted: (curKeysChain) => `Property '${curKeysChain}' was removed`,
-  nested: ({ children }, curKeysChain, f) => f(children, curKeysChain),
+  nested: (curKeysChain, { children }, f) => f(children, curKeysChain),
   unchanged: () => '',
-  changed: ({ oldValue, newValue }, curKeysChain) => `Property '${curKeysChain}' was updated. From ${getResultByType(oldValue)} to ${getResultByType(newValue)}`,
+  changed: (curKeysChain, { oldValue, newValue }) => `Property '${curKeysChain}' was updated. From ${getValByType(oldValue)} to ${getValByType(newValue)}`,
 };
 
 const getLineFeed = (data) => (data ? '\n' : data);
@@ -22,8 +22,9 @@ const getCurKeysChain = (keysChain, elem) => (keysChain ? `${keysChain}.${elem.k
 
 export default (tree) => {
   const iter = (data, keysChain = '') => data.reduce((acc, elem) => {
-    const result = renders[elem.state](elem, getCurKeysChain(keysChain, elem), iter);
-    return result ? `${acc}${getLineFeed(acc)}${result}` : acc;
+    const result = renders[elem.state](getCurKeysChain(keysChain, elem), elem, iter);
+    const newAcc = `${acc}${getLineFeed(acc)}${result}`;
+    return result ? newAcc : acc;
   }, '');
   return iter(tree);
 };

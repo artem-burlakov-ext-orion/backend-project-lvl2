@@ -7,7 +7,9 @@ const getPath = (filename) => join(dirname(fileURLToPath(import.meta.url)), file
 
 const readFile = (filePath) => {
   const ext = extname(filePath).slice(1);
-  return getParser()[ext](readFileSync(filePath, 'utf8'));
+  const data = readFileSync(filePath, 'utf8');
+  // console.log('DATA', getParser()[ext](data));
+  return getParser()[ext](data);
 };
 
 const getVersion = () => readFile('package.json').version;
