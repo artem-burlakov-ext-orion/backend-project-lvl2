@@ -22,15 +22,15 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: npm install, build
+      - name: Npm install
         run: 
           make ci
-        env:
-          CI: true
       - name: Run linter
-        run: |
+        run: 
           make lint
       - name: Test & publish code coverage
+        run:
+          make test
         uses: paambaati/codeclimate-action@v2.6.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
