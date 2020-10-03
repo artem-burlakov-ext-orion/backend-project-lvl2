@@ -7,4 +7,10 @@
 <a href="https://codeclimate.com/github/eifory/backend-project-lvl2/test_coverage"><img src="https://api.codeclimate.com/v1/badges/023fbddbc8c9c9e246f7/test_coverage" />
 </a>
 
+<p>
+ini, yml, json files diff => stylish format
+<p>
+<p>
+[![asciicast](https://asciinema.org/a/iCorWdvRfQJvGosFY1DTsCFwf.svg)](https://asciinema.org/a/iCorWdvRfQJvGosFY1DTsCFwf)
+</p>
 
