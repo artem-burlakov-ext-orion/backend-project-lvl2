@@ -17,7 +17,7 @@ ini, yml, json files diff => stylish format
 ini, yml, json files diff => plain format
 </p>
 <p>
-<<a href="https://asciinema.org/a/49EHR1iMIe6h3amsJ69CqlzTZ" target="_blank"><img src="https://asciinema.org/a/49EHR1iMIe6h3amsJ69CqlzTZ.svg" /></a>
+<a href="https://asciinema.org/a/49EHR1iMIe6h3amsJ69CqlzTZ" target="_blank"><img src="https://asciinema.org/a/49EHR1iMIe6h3amsJ69CqlzTZ.svg" /></a>
 </p>
 <p>
 ini, yml, json files diff => json format
