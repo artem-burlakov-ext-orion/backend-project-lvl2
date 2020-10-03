@@ -11,6 +11,6 @@
 ini, yml, json files diff => stylish format
 <p>
 <p>
-[![asciicast](https://asciinema.org/a/iCorWdvRfQJvGosFY1DTsCFwf.svg)](https://asciinema.org/a/iCorWdvRfQJvGosFY1DTsCFwf)
+<a href="https://asciinema.org/a/iCorWdvRfQJvGosFY1DTsCFwf" target="_blank"><img src="https://asciinema.org/a/iCorWdvRfQJvGosFY1DTsCFwf.svg" /></a>
 </p>
 
