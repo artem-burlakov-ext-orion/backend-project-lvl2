@@ -42,8 +42,8 @@ const getState = (before, after, key, f) => [
 ];
 
 const buildTree = (before, after) => {
-  const allKeys = [...Object.keys(before), ...Object.keys(after)];
-  const sortedUniqKeys = [...new Set(allKeys)].sort();
+  const uniqKeys = _.union(Object.keys(before), Object.keys(after));
+  const sortedUniqKeys = uniqKeys.sort();
   return sortedUniqKeys.map((key) => {
     const { state, build } = getState(before, after, key, buildTree)
       .find(({ check }) => check());
