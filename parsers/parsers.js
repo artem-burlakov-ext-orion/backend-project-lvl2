@@ -16,8 +16,15 @@ const fixIniParse = (tree) => {
   return iter(ini.parse(tree));
 };
 
-export default () => ({
+const parsers =  {
   json: JSON.parse,
   yml: yaml.safeLoad,
   ini: fixIniParse,
-});
+};
+
+export default (ext) => {
+  if (!_.has(parsers, ext)) {
+    throw new Error(`Unknown extension '${ext}'.`);
+  }
+  return parsers[ext];
+};
