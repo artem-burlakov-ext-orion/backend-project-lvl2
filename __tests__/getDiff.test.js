@@ -2,7 +2,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import buildDiff from '../index.js';
-import getParser from '../parsers/parsers.js';
+import getParser from '../src/parsers/parsers.js';
 import formatters from '../formatter/index.js';
 
 const getPath = (fileName) => join(dirname(fileURLToPath(import.meta.url)), '..', '__fixtures__', fileName);

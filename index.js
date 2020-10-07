@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { readFile } from './util.js';
-import getFormatted from './formatter/index.js';
+import { readFile } from './src/util.js';
+import getFormatted from './src/formatter/index.js';
 
 const isExist = (after, before, key) => _.has(after, key) && _.has(before, key);
 
@@ -53,5 +53,5 @@ const buildTree = (before, after) => {
 
 export default (firstFile, secondFile, format) => {
   const tree = buildTree(readFile(firstFile), readFile(secondFile));
-  return getFormatted(tree)[format]();
+  return getFormatted(format)(tree);
 };
