@@ -22,6 +22,8 @@ const parsers =  {
   ini: fixIniParse,
 };
 
+
+
 export default (ext) => {
   if (!_.has(parsers, ext)) {
     throw new Error(`Unknown extension '${ext}'.`);

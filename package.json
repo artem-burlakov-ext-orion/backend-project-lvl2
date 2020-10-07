@@ -4,7 +4,7 @@
   "description": "",
   "main": "index",
   "bin": {
-    "gendiff": "bin/gendiff.js"
+    "gendiff": "src/bin/gendiff.js"
   },
   "engines": {
     "node": ">=14"

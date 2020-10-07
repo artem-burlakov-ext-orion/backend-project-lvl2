@@ -2,12 +2,7 @@
 
 import program from 'commander';
 import { getVersion, getPath } from '../util.js';
-import buildDiff from '../index.js';
-
-// console.log(util.inspect(myObject, {showHidden: false, depth: null}))
-
-// // alternative shortcut
-// console.log(util.inspect(myObject, false, null, true /* enable colors */))
+import buildDiff from '../../index.js';
 
 program
   .version(getVersion())
