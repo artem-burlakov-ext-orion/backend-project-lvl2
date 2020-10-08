@@ -2,13 +2,8 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import buildDiff from '../index.js';
-import getParser from '../src/parsers/parsers.js';
-import formatters from '../formatter/index.js';
 
 const getPath = (fileName) => join(dirname(fileURLToPath(import.meta.url)), '..', '__fixtures__', fileName);
-
-const formats = Object.keys(formatters());
-const exts = Object.keys(getParser());
 
 const outputData = {
   json: {
@@ -25,20 +20,32 @@ const outputData = {
   },
 };
 
-const testData = exts.reduce((acc, ext) => {
-  formats.forEach((format) => {
+const validExts = ['ini', 'yml', 'json'];
+const validOutputFormats = ['stylish', 'plain', 'json'];
+
+const testData = validExts.reduce((acc, ext) => {
+  validOutputFormats.forEach((format) => {
     const beforePath = getPath(`before-nested.${ext}`);
     const afterPath = getPath(`after-nested.${ext}`);
-    acc.push([ext, format, beforePath, afterPath]);
+    acc = [...acc, [ext, format, beforePath, afterPath]];
   });
   return acc;
 }, []);
 
-const expectedData = formats.reduce((acc, format) => {
+const expectedData = validOutputFormats.reduce((acc, format) => {
   const resultPath = getPath(`result-${format}.${outputData[format].ext}`);
-  acc[format] = outputData[format].parse(resultPath);
-  return acc;
+  return {...acc, [format]: outputData[format].parse(resultPath)};
 }, {});
+
+
+
+
+// validExts.reduce((acc, ext) => {
+//   acc.push([])
+
+// },[])
+
+// ['ini','ini','stylish']
 
 test.each(testData)('build %s files diff, output %s', (_, format, before, after) => {
   expect(buildDiff(before, after, format)).toBe(expectedData[format]);
