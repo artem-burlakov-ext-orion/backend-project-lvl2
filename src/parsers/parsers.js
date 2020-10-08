@@ -16,7 +16,7 @@ const fixIniParse = (tree) => {
   return iter(ini.parse(tree));
 };
 
-const parsers =  {
+const parsers = {
   json: JSON.parse,
   yml: yaml.safeLoad,
   ini: fixIniParse,

@@ -5,10 +5,23 @@ import buildDiff from '../index.js';
 
 const getPath = (fileName) => join(dirname(fileURLToPath(import.meta.url)), '..', '__fixtures__', fileName);
 
+const validExts = ['ini', 'yml', 'json'];
+const inValidExts = ['txt', 'doc', 'odt', 'js'];
+const validOutputFormats = ['stylish', 'plain', 'json'];
+
+beforeAll(() => {
+  inValidExts.forEach((ext) => {
+    if (!validExts.includes(ext)) {
+      fs.writeFileSync(getPath(`before-nested.${ext}`), '');
+      fs.writeFileSync(getPath(`after-nested.${ext}`), '');
+    }
+  });
+});
+
 const outputData = {
   json: {
     ext: 'json',
-    parse: (path) => (fs.readFileSync(path, 'utf8')),
+    parse: (path) => fs.readFileSync(path, 'utf8'),
   },
   plain: {
     ext: 'txt',
@@ -20,33 +33,55 @@ const outputData = {
   },
 };
 
-const validExts = ['ini', 'yml', 'json'];
-const validOutputFormats = ['stylish', 'plain', 'json'];
+const validTestData = validOutputFormats.reduce((acc, format) => {
+  validExts.map((ext1) => {
+    validExts.map((ext2) => {
+      const beforePath = getPath(`before-nested.${ext1}`);
+      const afterPath = getPath(`after-nested.${ext2}`);
+      acc = [...acc, [beforePath, afterPath, format]];
+    });
+  });
+  return acc;
+}, []);
 
-const testData = validExts.reduce((acc, ext) => {
-  validOutputFormats.forEach((format) => {
-    const beforePath = getPath(`before-nested.${ext}`);
-    const afterPath = getPath(`after-nested.${ext}`);
-    acc = [...acc, [ext, format, beforePath, afterPath]];
+const inValidTestData = validOutputFormats.reduce((acc, format) => {
+  inValidExts.map((ext1) => {
+    validExts.map((ext2) => {
+      const beforePath = getPath(`before-nested.${ext1}`);
+      const afterPath = getPath(`after-nested.${ext2}`);
+      acc = [...acc, [beforePath, afterPath, format, ext1]];
+    });
   });
   return acc;
 }, []);
 
 const expectedData = validOutputFormats.reduce((acc, format) => {
   const resultPath = getPath(`result-${format}.${outputData[format].ext}`);
-  return {...acc, [format]: outputData[format].parse(resultPath)};
+  return { ...acc, [format]: outputData[format].parse(resultPath) };
 }, {});
 
+describe('check test data', () => {
+  test('invalidExts and validExts include different extensions', () => {
+    const result = validExts.filter((ext) => inValidExts.includes(ext));
+    expect(result).toHaveLength(0);
+  });
+});
 
+describe('valid input files and valid output format', () => {
+  test.each(validTestData)('before: %s\nafter: %s\noutput: %s', (before, after, format) => {
+    expect(buildDiff(before, after, format)).toBe(expectedData[format]);
+  });
+});
 
+describe('invalid input files and valid output format', () => {
+  test.each(inValidTestData)('before: %s\nafter: %s\noutput: %s', (before, after, format, beforeExt) => {
+    expect(() => buildDiff(before, after, format)).toThrow(`Unknown extension '${beforeExt}'.`);
+  });
+});
 
-// validExts.reduce((acc, ext) => {
-//   acc.push([])
-
-// },[])
-
-// ['ini','ini','stylish']
-
-test.each(testData)('build %s files diff, output %s', (_, format, before, after) => {
-  expect(buildDiff(before, after, format)).toBe(expectedData[format]);
+afterAll(() => {
+  inValidExts.forEach((ext) => {
+    fs.unlinkSync(getPath(`before-nested.${ext}`));
+    fs.unlinkSync(getPath(`after-nested.${ext}`));
+  });
 });
