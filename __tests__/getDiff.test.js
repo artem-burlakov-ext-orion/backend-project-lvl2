@@ -35,17 +35,6 @@ const outputData = {
   },
 };
 
-// const func = (data1, data2) => {
-//   let curValue;
-//   data1.forEach((ext1) => {
-//     data2.forEach((ext2) => {
-//       const beforePath = getPath(`before-nested.${ext1}`);
-//       const afterPath = getPath(`after-nested.${ext2}`);
-//       curValue = [beforePath, afterPath];
-//     }
-//   }
-// }
-
 const validTestData = validOutputFormats.reduce((acc, format) => {
   let testDataCurrentValue = [...acc];
   validExts.forEach((ext1) => {
