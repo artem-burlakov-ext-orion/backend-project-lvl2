@@ -11,7 +11,7 @@ const formatters = {
 
 export default (format) => {
   if (!_.has(formatters, format)) {
-    throw new Error(`Unknown output format '${format}.'`);
+    throw new Error(`Unknown output format '${format}'.`);
   }
   return formatters[format];
 };

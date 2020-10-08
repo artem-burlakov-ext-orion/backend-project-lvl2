@@ -8,6 +8,8 @@ const getPath = (fileName) => join(dirname(fileURLToPath(import.meta.url)), '..'
 const validExts = ['ini', 'yml', 'json'];
 const inValidExts = ['txt', 'doc', 'odt', 'js'];
 const validOutputFormats = ['stylish', 'plain', 'json'];
+const defaultOutputFormat = 'stylish';
+const inValidOutputFormats = ['txt', 'xml'];
 
 beforeAll(() => {
   inValidExts.forEach((ext) => {
@@ -34,8 +36,8 @@ const outputData = {
 };
 
 const validTestData = validOutputFormats.reduce((acc, format) => {
-  validExts.map((ext1) => {
-    validExts.map((ext2) => {
+  validExts.forEach((ext1) => {
+    validExts.forEach((ext2) => {
       const beforePath = getPath(`before-nested.${ext1}`);
       const afterPath = getPath(`after-nested.${ext2}`);
       acc = [...acc, [beforePath, afterPath, format]];
@@ -44,9 +46,9 @@ const validTestData = validOutputFormats.reduce((acc, format) => {
   return acc;
 }, []);
 
-const inValidTestData = validOutputFormats.reduce((acc, format) => {
-  inValidExts.map((ext1) => {
-    validExts.map((ext2) => {
+const inValidTestData1 = validOutputFormats.reduce((acc, format) => {
+  inValidExts.forEach((ext1) => {
+    validExts.forEach((ext2) => {
       const beforePath = getPath(`before-nested.${ext1}`);
       const afterPath = getPath(`after-nested.${ext2}`);
       acc = [...acc, [beforePath, afterPath, format, ext1]];
@@ -54,6 +56,38 @@ const inValidTestData = validOutputFormats.reduce((acc, format) => {
   });
   return acc;
 }, []);
+
+const inValidTestData2 = validOutputFormats.reduce((acc, format) => {
+  validExts.forEach((ext1) => {
+    inValidExts.forEach((ext2) => {
+      const beforePath = getPath(`before-nested.${ext1}`);
+      const afterPath = getPath(`after-nested.${ext2}`);
+      acc = [...acc, [beforePath, afterPath, format, ext2]];
+    });
+  });
+  return acc;
+}, []);
+
+const defaultOutputTestData = validExts.reduce((acc, ext1) => {
+  validExts.forEach((ext2) => {
+    const beforePath = getPath(`before-nested.${ext1}`);
+    const afterPath = getPath(`after-nested.${ext2}`);
+    acc = [...acc, [beforePath, afterPath, defaultOutputFormat]];
+  });
+  return acc;
+}, []);
+
+const inValidOutputTestData = inValidOutputFormats.reduce((acc, format) => {
+  validExts.forEach((ext1) => {
+    validExts.forEach((ext2) => {
+      const beforePath = getPath(`before-nested.${ext1}`);
+      const afterPath = getPath(`after-nested.${ext2}`);
+      acc = [...acc, [beforePath, afterPath, format]];
+    });
+  });
+  return acc;
+}, []);
+  
 
 const expectedData = validOutputFormats.reduce((acc, format) => {
   const resultPath = getPath(`result-${format}.${outputData[format].ext}`);
@@ -65,17 +99,37 @@ describe('check test data', () => {
     const result = validExts.filter((ext) => inValidExts.includes(ext));
     expect(result).toHaveLength(0);
   });
+  test('invalidOutputFormats and validOutputFormats include different formats', () => {
+    const result = validOutputFormats.filter((ext) => inValidOutputFormats.includes(ext));
+    expect(result).toHaveLength(0);
+  });
+  test('validOutputFormats include defaultOutputFormat', () => {
+    const result = validOutputFormats.includes(defaultOutputFormat);
+    expect(result).toBe(true);
+  });
 });
 
 describe('valid input files and valid output format', () => {
   test.each(validTestData)('before: %s\nafter: %s\noutput: %s', (before, after, format) => {
     expect(buildDiff(before, after, format)).toBe(expectedData[format]);
   });
+  test.each(defaultOutputTestData)('before: %s\nafter: %s\n default output: %s', (before, after, format) => {
+    expect(buildDiff(before, after, format)).toBe(expectedData[format]);
+  });
 });
 
 describe('invalid input files and valid output format', () => {
-  test.each(inValidTestData)('before: %s\nafter: %s\noutput: %s', (before, after, format, beforeExt) => {
+  test.each(inValidTestData1)('before: %s\nafter: %s\noutput: %s', (before, after, format, beforeExt) => {
     expect(() => buildDiff(before, after, format)).toThrow(`Unknown extension '${beforeExt}'.`);
+  });
+  test.each(inValidTestData2)('before: %s\nafter: %s\noutput: %s', (before, after, format, afterExt) => {
+    expect(() => buildDiff(before, after, format)).toThrow(`Unknown extension '${afterExt}'.`);
+  });
+});
+
+describe('valid input files and invalid output format', () => {
+  test.each(inValidOutputTestData)('before: %s\nafter: %s\noutput: %s', (before, after, format) => {
+    expect(() => buildDiff(before, after, format)).toThrow(`Unknown output format '${format}'.`);
   });
 });
 
