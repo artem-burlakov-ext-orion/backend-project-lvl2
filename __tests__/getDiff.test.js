@@ -7,8 +7,8 @@ const getPath = (fileName) => join(dirname(fileURLToPath(import.meta.url)), '..'
 
 const validExts = ['ini', 'yml', 'json'];
 const inValidExts = ['txt', 'doc', 'odt', 'js'];
-const validOutputFormats = ['stylish', 'plain', 'json'];
 const defaultOutputFormat = 'stylish';
+const validOutputFormats = [defaultOutputFormat, 'plain', 'json'];
 const inValidOutputFormats = ['txt', 'xml'];
 
 beforeAll(() => {
@@ -36,58 +36,62 @@ const outputData = {
 };
 
 const validTestData = validOutputFormats.reduce((acc, format) => {
+  let testDataCurrentValue;
   validExts.forEach((ext1) => {
     validExts.forEach((ext2) => {
       const beforePath = getPath(`before-nested.${ext1}`);
       const afterPath = getPath(`after-nested.${ext2}`);
-      acc = [...acc, [beforePath, afterPath, format]];
+      testDataCurrentValue = [...acc, [beforePath, afterPath, format]];
     });
   });
-  return acc;
+  return testDataCurrentValue;
 }, []);
 
 const inValidTestData1 = validOutputFormats.reduce((acc, format) => {
+  let testDataCurrentValue;
   inValidExts.forEach((ext1) => {
     validExts.forEach((ext2) => {
       const beforePath = getPath(`before-nested.${ext1}`);
       const afterPath = getPath(`after-nested.${ext2}`);
-      acc = [...acc, [beforePath, afterPath, format, ext1]];
+      testDataCurrentValue = [...acc, [beforePath, afterPath, format, ext1]];
     });
   });
-  return acc;
+  return testDataCurrentValue;
 }, []);
 
 const inValidTestData2 = validOutputFormats.reduce((acc, format) => {
+  let testDataCurrentValue;
   validExts.forEach((ext1) => {
     inValidExts.forEach((ext2) => {
       const beforePath = getPath(`before-nested.${ext1}`);
       const afterPath = getPath(`after-nested.${ext2}`);
-      acc = [...acc, [beforePath, afterPath, format, ext2]];
+      testDataCurrentValue = [...acc, [beforePath, afterPath, format, ext2]];
     });
   });
-  return acc;
+  return testDataCurrentValue;
 }, []);
 
 const defaultOutputTestData = validExts.reduce((acc, ext1) => {
+  let testDataCurrentValue;
   validExts.forEach((ext2) => {
     const beforePath = getPath(`before-nested.${ext1}`);
     const afterPath = getPath(`after-nested.${ext2}`);
-    acc = [...acc, [beforePath, afterPath, defaultOutputFormat]];
+    testDataCurrentValue = [...acc, [beforePath, afterPath, defaultOutputFormat]];
   });
-  return acc;
+  return testDataCurrentValue;
 }, []);
 
 const inValidOutputTestData = inValidOutputFormats.reduce((acc, format) => {
+  let testDataCurrentValue;
   validExts.forEach((ext1) => {
     validExts.forEach((ext2) => {
       const beforePath = getPath(`before-nested.${ext1}`);
       const afterPath = getPath(`after-nested.${ext2}`);
-      acc = [...acc, [beforePath, afterPath, format]];
+      testDataCurrentValue = [...acc, [beforePath, afterPath, format]];
     });
   });
-  return acc;
+  return testDataCurrentValue;
 }, []);
-  
 
 const expectedData = validOutputFormats.reduce((acc, format) => {
   const resultPath = getPath(`result-${format}.${outputData[format].ext}`);
