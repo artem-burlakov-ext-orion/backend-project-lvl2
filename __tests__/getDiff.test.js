@@ -2,19 +2,18 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import buildDiff from '../index.js';
+import _ from 'lodash';
 
 const getPath = (fileName) => join(dirname(fileURLToPath(import.meta.url)), '..', '__fixtures__', fileName);
 
 const validInputFileExts = ['ini', 'yml', 'json'];
 const inValidInputFileExts = ['txt', 'doc', 'odt', 'js'];
-const defaultOutputFormat = 'stylish';
-const validOutputFormats = [defaultOutputFormat, 'plain', 'json'];
+const validOutputFormats = ['stylish', 'plain', 'json'];
 const inValidOutputFormats = ['txt', 'xml'];
-
-const outputData = {
+const validOutputFormatsExts = {
+  stylish: 'txt',
   json: 'json',
   plain: 'txt',
-  stylish: 'txt',
 };
 
 const validTestData = validOutputFormats.reduce((acc, format) => {
@@ -53,16 +52,6 @@ const inValidAfterTestData = validOutputFormats.reduce((acc, format) => {
   return testDataCurrentValue;
 }, []);
 
-const defaultOutputTestData = validInputFileExts.reduce((acc, beforeExt) => {
-  let testDataCurrentValue = [...acc];
-  validInputFileExts.forEach((afterExt) => {
-    const beforePath = getPath(`before-nested.${beforeExt}`);
-    const afterPath = getPath(`after-nested.${afterExt}`);
-    testDataCurrentValue = [...testDataCurrentValue, [beforePath, afterPath, defaultOutputFormat]];
-  });
-  return testDataCurrentValue;
-}, []);
-
 const inValidOutputTestData = inValidOutputFormats.reduce((acc, format) => {
   let testDataCurrentValue = [...acc];
   validInputFileExts.forEach((beforeExt) => {
@@ -76,7 +65,7 @@ const inValidOutputTestData = inValidOutputFormats.reduce((acc, format) => {
 }, []);
 
 const expectedData = validOutputFormats.reduce((acc, format) => {
-  const resultPath = getPath(`result-${format}.${outputData[format]}`);
+  const resultPath = getPath(`result-${format}.${validOutputFormatsExts[format]}`);
   return { ...acc, [format]: fs.readFileSync(resultPath, 'utf8') };
 }, {});
 
@@ -89,17 +78,10 @@ describe('check test data', () => {
     const result = validOutputFormats.filter((ext) => inValidOutputFormats.includes(ext));
     expect(result).toHaveLength(0);
   });
-  test('validOutputFormats include defaultOutputFormat', () => {
-    const result = validOutputFormats.includes(defaultOutputFormat);
-    expect(result).toBe(true);
-  });
 });
 
 describe('valid input files and valid output format', () => {
   test.each(validTestData)('before: %s\nafter: %s\noutput: %s', (before, after, format) => {
-    expect(buildDiff(before, after, format)).toBe(expectedData[format]);
-  });
-  test.each(defaultOutputTestData)('before: %s\nafter: %s\n default output: %s', (before, after, format) => {
     expect(buildDiff(before, after, format)).toBe(expectedData[format]);
   });
 });
