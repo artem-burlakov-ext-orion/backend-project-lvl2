@@ -1,12 +1,12 @@
 # hexlet-backend-project-lvl2
-# Cli utility compare two files and return result in selected format.
+# Cli utility compare two files and return result in selected format
 
 available input extensions:
 - ini
 - json
 - yml
 
-available outputformats:
+available output formats:
 - stylish (default)
 - json
 - plain
