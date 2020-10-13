@@ -1,5 +1,15 @@
-# hexlet-backend-project-2
+# hexlet-backend-project
+Cli utility compare two files and return result in selected format.
 
+available input extensions:
+- ini
+- json
+- yml
+
+available outputformats:
+- stylish (default)
+- json
+- plain
 
 ![Node CI](https://github.com/eifory/backend-project-lvl2/workflows/Node%20CI/badge.svg?branch=master)
 
