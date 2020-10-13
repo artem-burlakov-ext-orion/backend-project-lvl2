@@ -12,18 +12,9 @@ const validOutputFormats = [defaultOutputFormat, 'plain', 'json'];
 const inValidOutputFormats = ['txt', 'xml'];
 
 const outputData = {
-  json: {
-    ext: 'json',
-    parse: (path) => fs.readFileSync(path, 'utf8'),
-  },
-  plain: {
-    ext: 'txt',
-    parse: (path) => fs.readFileSync(path, 'utf8'),
-  },
-  stylish: {
-    ext: 'txt',
-    parse: (path) => fs.readFileSync(path, 'utf8'),
-  },
+  json: 'json',
+  plain: 'txt',
+  stylish: 'txt',
 };
 
 const validTestData = validOutputFormats.reduce((acc, format) => {
@@ -85,8 +76,8 @@ const inValidOutputTestData = inValidOutputFormats.reduce((acc, format) => {
 }, []);
 
 const expectedData = validOutputFormats.reduce((acc, format) => {
-  const resultPath = getPath(`result-${format}.${outputData[format].ext}`);
-  return { ...acc, [format]: outputData[format].parse(resultPath) };
+  const resultPath = getPath(`result-${format}.${outputData[format]}`);
+  return { ...acc, [format]: fs.readFileSync(resultPath, 'utf8') };
 }, {});
 
 describe('check test data', () => {
