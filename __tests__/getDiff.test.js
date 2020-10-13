@@ -5,8 +5,8 @@ import buildDiff from '../index.js';
 
 const getPath = (fileName) => join(dirname(fileURLToPath(import.meta.url)), '..', '__fixtures__', fileName);
 
-const validExts = ['ini', 'yml', 'json'];
-const inValidExts = ['txt', 'doc', 'odt', 'js'];
+const validInputFileExts = ['ini', 'yml', 'json'];
+const inValidInputFileExts = ['txt', 'doc', 'odt', 'js'];
 const defaultOutputFormat = 'stylish';
 const validOutputFormats = [defaultOutputFormat, 'plain', 'json'];
 const inValidOutputFormats = ['txt', 'xml'];
@@ -28,8 +28,8 @@ const outputData = {
 
 const validTestData = validOutputFormats.reduce((acc, format) => {
   let testDataCurrentValue = [...acc];
-  validExts.forEach((beforeExt) => {
-    validExts.forEach((afterExt) => {
+  validInputFileExts.forEach((beforeExt) => {
+    validInputFileExts.forEach((afterExt) => {
       const beforePath = getPath(`before-nested.${beforeExt}`);
       const afterPath = getPath(`after-nested.${afterExt}`);
       testDataCurrentValue = [...testDataCurrentValue, [beforePath, afterPath, format]];
@@ -40,8 +40,8 @@ const validTestData = validOutputFormats.reduce((acc, format) => {
 
 const inValidBeforeTestData = validOutputFormats.reduce((acc, format) => {
   let testDataCurrentValue = [...acc];
-  inValidExts.forEach((beforeExt) => {
-    validExts.forEach((afterExt) => {
+  inValidInputFileExts.forEach((beforeExt) => {
+    validInputFileExts.forEach((afterExt) => {
       const beforePath = getPath(`before-nested.${beforeExt}`);
       const afterPath = getPath(`after-nested.${afterExt}`);
       testDataCurrentValue = [...testDataCurrentValue, [beforePath, afterPath, format, beforeExt]];
@@ -52,8 +52,8 @@ const inValidBeforeTestData = validOutputFormats.reduce((acc, format) => {
 
 const inValidAfterTestData = validOutputFormats.reduce((acc, format) => {
   let testDataCurrentValue = [...acc];
-  validExts.forEach((beforeExt) => {
-    inValidExts.forEach((afterExt) => {
+  validInputFileExts.forEach((beforeExt) => {
+    inValidInputFileExts.forEach((afterExt) => {
       const beforePath = getPath(`before-nested.${beforeExt}`);
       const afterPath = getPath(`after-nested.${afterExt}`);
       testDataCurrentValue = [...testDataCurrentValue, [beforePath, afterPath, format, afterExt]];
@@ -62,9 +62,9 @@ const inValidAfterTestData = validOutputFormats.reduce((acc, format) => {
   return testDataCurrentValue;
 }, []);
 
-const defaultOutputTestData = validExts.reduce((acc, beforeExt) => {
+const defaultOutputTestData = validInputFileExts.reduce((acc, beforeExt) => {
   let testDataCurrentValue = [...acc];
-  validExts.forEach((afterExt) => {
+  validInputFileExts.forEach((afterExt) => {
     const beforePath = getPath(`before-nested.${beforeExt}`);
     const afterPath = getPath(`after-nested.${afterExt}`);
     testDataCurrentValue = [...testDataCurrentValue, [beforePath, afterPath, defaultOutputFormat]];
@@ -74,8 +74,8 @@ const defaultOutputTestData = validExts.reduce((acc, beforeExt) => {
 
 const inValidOutputTestData = inValidOutputFormats.reduce((acc, format) => {
   let testDataCurrentValue = [...acc];
-  validExts.forEach((beforeExt) => {
-    validExts.forEach((afterExt) => {
+  validInputFileExts.forEach((beforeExt) => {
+    validInputFileExts.forEach((afterExt) => {
       const beforePath = getPath(`before-nested.${beforeExt}`);
       const afterPath = getPath(`after-nested.${afterExt}`);
       testDataCurrentValue = [...testDataCurrentValue, [beforePath, afterPath, format]];
@@ -91,7 +91,7 @@ const expectedData = validOutputFormats.reduce((acc, format) => {
 
 describe('check test data', () => {
   test('invalidExts and validExts include different extensions', () => {
-    const result = validExts.filter((ext) => inValidExts.includes(ext));
+    const result = validInputFileExts.filter((ext) => inValidInputFileExts.includes(ext));
     expect(result).toHaveLength(0);
   });
   test('invalidOutputFormats and validOutputFormats include different formats', () => {
