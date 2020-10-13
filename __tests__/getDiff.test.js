@@ -38,7 +38,7 @@ const validTestData = validOutputFormats.reduce((acc, format) => {
   return testDataCurrentValue;
 }, []);
 
-const inValidTestData1 = validOutputFormats.reduce((acc, format) => {
+const inValidBeforeTestData = validOutputFormats.reduce((acc, format) => {
   let testDataCurrentValue = [...acc];
   inValidExts.forEach((ext1) => {
     validExts.forEach((ext2) => {
@@ -50,7 +50,7 @@ const inValidTestData1 = validOutputFormats.reduce((acc, format) => {
   return testDataCurrentValue;
 }, []);
 
-const inValidTestData2 = validOutputFormats.reduce((acc, format) => {
+const inValidAfterTestData = validOutputFormats.reduce((acc, format) => {
   let testDataCurrentValue = [...acc];
   validExts.forEach((ext1) => {
     inValidExts.forEach((ext2) => {
@@ -114,10 +114,10 @@ describe('valid input files and valid output format', () => {
 });
 
 describe('invalid input files and valid output format', () => {
-  test.each(inValidTestData1)('before: %s\nafter: %s\noutput: %s', (before, after, format, beforeExt) => {
+  test.each(inValidBeforeTestData)('before: %s\nafter: %s\noutput: %s', (before, after, format, beforeExt) => {
     expect(() => buildDiff(before, after, format)).toThrow(`Unknown extension '${beforeExt}'.`);
   });
-  test.each(inValidTestData2)('before: %s\nafter: %s\noutput: %s', (before, after, format, afterExt) => {
+  test.each(inValidAfterTestData)('before: %s\nafter: %s\noutput: %s', (before, after, format, afterExt) => {
     expect(() => buildDiff(before, after, format)).toThrow(`Unknown extension '${afterExt}'.`);
   });
 });
