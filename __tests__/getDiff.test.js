@@ -11,15 +11,6 @@ const defaultOutputFormat = 'stylish';
 const validOutputFormats = [defaultOutputFormat, 'plain', 'json'];
 const inValidOutputFormats = ['txt', 'xml'];
 
-beforeAll(() => {
-  inValidExts.forEach((ext) => {
-    if (!validExts.includes(ext)) {
-      fs.writeFileSync(getPath(`before-nested.${ext}`), '');
-      fs.writeFileSync(getPath(`after-nested.${ext}`), '');
-    }
-  });
-});
-
 const outputData = {
   json: {
     ext: 'json',
@@ -134,12 +125,5 @@ describe('invalid input files and valid output format', () => {
 describe('valid input files and invalid output format', () => {
   test.each(inValidOutputTestData)('before: %s\nafter: %s\noutput: %s', (before, after, format) => {
     expect(() => buildDiff(before, after, format)).toThrow(`Unknown output format '${format}'.`);
-  });
-});
-
-afterAll(() => {
-  inValidExts.forEach((ext) => {
-    fs.unlinkSync(getPath(`before-nested.${ext}`));
-    fs.unlinkSync(getPath(`after-nested.${ext}`));
   });
 });
