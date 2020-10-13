@@ -1,5 +1,5 @@
-# hexlet-backend-project
-Cli utility compare two files and return result in selected format.
+# hexlet-backend-project-lvl2
+# Cli utility compare two files and return result in selected format.
 
 available input extensions:
 - ini
