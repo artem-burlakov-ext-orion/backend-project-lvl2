@@ -32,3 +32,10 @@ test.each(testData)('before: %s\nafter: %s\noutput: %s', (beforeExt, afterExt, f
   const afterPath = getPath(`after-nested.${afterExt}`);
   expect(buildDiff(beforePath, afterPath, format)).toBe(expected);
 });
+
+test('should throw error', () => {
+  const inValidExt = 'txt';
+  const beforePath = getPath(`before-nested.${inValidExt}`);
+  const afterPath = getPath('after-nested.json');
+  expect(() => buildDiff(beforePath, afterPath, 'stylish')).toThrow(`Unknown extension '${inValidExt}'.`);
+});
